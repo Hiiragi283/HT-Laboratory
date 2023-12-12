@@ -14,7 +14,18 @@ base {
 }
 
 repositories {
-
+    mavenCentral()
+    maven {
+        url "https://cursemaven.com"
+        content { includeGroup "curse.maven" }
+    }
+    maven {
+        url "https://api.modrinth.com/maven"
+        content { includeGroup "maven.modrinth" }
+    }
+    maven { url "https://maven.architectury.dev" }
+    maven { url "https://maven.shedaniel.me" }
+    maven { url "https://maven.terraformersmc.com/releases" }
 }
 
 fabricApi {
@@ -29,6 +40,20 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+
+    //HT Materials
+    modCompileOnly(fileTree(dir: "libs", include: '*.jar'))
+
+    //Roughly Enough Items
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:6.4.90") {
+        exclude(module: "fabric-api")
+        exclude(module: "fabric-loader")
+    }
+
+    modImplementation("me.shedaniel:RoughlyEnoughItems-fabric:8.3.618") {
+        exclude(module: "fabric-api")
+        exclude(module: "fabric-loader")
+    }
 
 }
 

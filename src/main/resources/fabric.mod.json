@@ -3,7 +3,7 @@
   "id": "ht_laboratory",
   "version": "${version}",
   "name": "HT Laboratory",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "A Minecraft mod for Fabric/Quilt that adds laboratory contents ",
   "authors": [
     "Hiiragi283"
   ],
@@ -38,11 +38,12 @@
     "ht_laboratory.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.1",
-    "minecraft": "~1.18.2",
-    "java": ">=17",
     "fabric-api": "*",
-    "fabric-language-kotlin": ">=1.9.21"
+    "fabric-language-kotlin": ">=1.9.21",
+    "fabricloader": ">=0.15.1",
+    "java": ">=17",
+    "minecraft": "~1.18.2",
+    "ht_materials": ">=0.3.0-1.18.2"
   },
   "suggests": {
     "another-mod": "*"
