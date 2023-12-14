@@ -1,0 +1,15 @@
+{
+  "type": "ht_laboratory:mortar",
+  "primary": {
+    "item": "minecraft:bone",
+    "count": 1
+  },
+  "secondary": {
+    "item": "minecraft:air",
+    "count": 1
+  },
+  "result": {
+    "item": "minecraft:bone_meal",
+    "count": 6
+  }
+}

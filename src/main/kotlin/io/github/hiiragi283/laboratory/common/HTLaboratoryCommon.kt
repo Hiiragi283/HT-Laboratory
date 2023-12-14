@@ -1,6 +1,7 @@
 package io.github.hiiragi283.laboratory.common
 
 import net.fabricmc.api.ModInitializer
+import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
 
 object HTLaboratoryCommon : ModInitializer {
@@ -13,5 +14,8 @@ object HTLaboratoryCommon : ModInitializer {
     override fun onInitialize() {
 
     }
+
+    @JvmStatic
+    fun id(path: String): Identifier = Identifier(MOD_ID, path)
 
 }
