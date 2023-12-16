@@ -6,16 +6,17 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.RecipeType
+import net.minecraft.recipe.ShapedRecipe
 import net.minecraft.util.Identifier
+import net.minecraft.util.JsonHelper
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 class HTMortarRecipe(
     private val id: Identifier,
-    private val group: String?,
-    private val output: ItemStack,
     private val primary: HTIngredient,
-    private val secondary: HTIngredient
+    private val secondary: HTIngredient,
+    private val output: ItemStack
 ) : HTRecipe<HTMortarRecipe> {
 
     //    HTRecipe    //
@@ -25,8 +26,6 @@ class HTMortarRecipe(
     override fun craft(world: World, pos: BlockPos): ItemStack = output
 
     override fun getOutput(): ItemStack = output
-
-    override fun getGroup(): String = group ?: super.getGroup()
 
     override fun getId(): Identifier = id
 
@@ -39,15 +38,23 @@ class HTMortarRecipe(
     object Serializer : RecipeSerializer<HTMortarRecipe> {
 
         override fun read(id: Identifier, json: JsonObject): HTMortarRecipe {
-            TODO("Not yet implemented")
+            val primary: HTIngredient = HTIngredient.read(JsonHelper.getObject(json, "primary"))
+            val secondary: HTIngredient = HTIngredient.read(JsonHelper.getObject(json, "secondary"))
+            val output: ItemStack = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "result"))
+            return HTMortarRecipe(id, primary, secondary, output)
         }
 
         override fun read(id: Identifier, buf: PacketByteBuf): HTMortarRecipe {
-            TODO("Not yet implemented")
+            val primary: HTIngredient = HTIngredient.read(buf)
+            val secondary: HTIngredient = HTIngredient.read(buf)
+            val output: ItemStack = buf.readItemStack()
+            return HTMortarRecipe(id, primary, secondary, output)
         }
 
         override fun write(buf: PacketByteBuf, recipe: HTMortarRecipe) {
-            TODO("Not yet implemented")
+            recipe.primary.write(buf)
+            recipe.secondary.write(buf)
+            buf.writeItemStack(recipe.output)
         }
 
     }

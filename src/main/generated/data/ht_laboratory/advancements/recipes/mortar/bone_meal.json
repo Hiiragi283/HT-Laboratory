@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minecraft:bone_meal"
+      "ht_laboratory:mortar/bone_meal"
     ]
   },
   "criteria": {
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minecraft:bone_meal"
+        "recipe": "ht_laboratory:mortar/bone_meal"
       }
     }
   },
