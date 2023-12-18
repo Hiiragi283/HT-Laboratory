@@ -1,6 +1,5 @@
 package io.github.hiiragi283.laboratory.common.block.entity
 
-import io.github.hiiragi283.laboratory.common.HLBlockEntityTypes
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -20,7 +19,7 @@ import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 
 class HTMortarBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(
-    HLBlockEntityTypes.MORTAR,
+    null,
     pos,
     state
 ), Inventory, NamedScreenHandlerFactory {

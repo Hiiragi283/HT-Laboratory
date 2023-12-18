@@ -9,7 +9,7 @@ import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.item.Items
 import java.util.function.Consumer
 
-class HLRecipeProvider(dataGenerator: FabricDataGenerator) : FabricRecipeProvider(dataGenerator) {
+class HLRecipeProvider(fabricDataGenerator: FabricDataGenerator) : FabricRecipeProvider(fabricDataGenerator) {
 
     override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
         HTMortarRecipeJsonBuilder(Items.BONE_MEAL, 6)

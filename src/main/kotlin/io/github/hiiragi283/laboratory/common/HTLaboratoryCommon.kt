@@ -12,7 +12,12 @@ object HTLaboratoryCommon : ModInitializer {
     private val logger = LoggerFactory.getLogger(MOD_NAME)
 
     override fun onInitialize() {
-
+        HLBlockEntityTypes
+        HLBlocks
+        HLItems
+        HLRecipeSerializers
+        HLRecipeTypes
+        HLScreenHandlerTypes
     }
 
     @JvmStatic

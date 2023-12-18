@@ -1,7 +1,7 @@
 package io.github.hiiragi283.laboratory.api.recipe
 
 import com.google.gson.JsonObject
-import io.github.hiiragi283.laboratory.common.HLRecipes
+import io.github.hiiragi283.laboratory.common.HLRecipeSerializers
 import io.github.hiiragi283.laboratory.common.toJson
 import io.github.hiiragi283.material.common.util.prefix
 import net.minecraft.advancement.Advancement
@@ -94,7 +94,7 @@ class HTMortarRecipeJsonBuilder private constructor(
 
         override fun getRecipeId(): Identifier = recipeId
 
-        override fun getSerializer(): RecipeSerializer<*> = HLRecipes.MORTAR_SERIALIZER
+        override fun getSerializer(): RecipeSerializer<*> = HLRecipeSerializers.MORTAR_SERIALIZER
 
         override fun toAdvancementJson(): JsonObject = advancementBuilder.toJson()
 

@@ -1,16 +1,16 @@
 package io.github.hiiragi283.laboratory.api.recipe
 
+import net.minecraft.block.entity.BlockEntity
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.recipe.Recipe
-import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-interface HTRecipe<T : HTRecipe<T>> : Recipe<Inventory> {
+interface HTRecipe<T : BlockEntity> : Recipe<Inventory> {
 
-    fun matches(world: World, pos: BlockPos): Boolean
+    fun matches(blockEntity: T): Boolean
 
-    fun craft(world: World, pos: BlockPos): ItemStack
+    fun craft(blockEntity: T): ItemStack
 
     //    Recipe    //
 

@@ -4,20 +4,19 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
 import com.google.gson.JsonSyntaxException
+import io.github.hiiragi283.material.common.util.getEntries
 import net.minecraft.item.ItemConvertible
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.tag.TagKey
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
-import net.minecraft.util.registry.RegistryEntry
 import java.util.function.Consumer
+import java.util.function.Predicate
 
-sealed class HTIngredient(val count: Int) {
+sealed class HTIngredient(val count: Int) : Predicate<ItemStack> {
 
     abstract val matchingStacks: Collection<ItemStack>
-
-    abstract fun matches(stack: ItemStack): Boolean
 
     abstract fun jsonConsumer(consumer: Consumer<JsonObject>)
 
@@ -62,7 +61,10 @@ sealed class HTIngredient(val count: Int) {
         }
 
         @JvmStatic
-        fun read(buf: PacketByteBuf): HTIngredient = Packet(buf.readList(PacketByteBuf::readItemStack))
+        fun read(buf: PacketByteBuf): HTIngredient {
+            val list: List<ItemStack> = buf.readList(PacketByteBuf::readItemStack)
+            return if (list.isEmpty() ) empty() else Packet(list)
+        }
 
     }
 
@@ -70,7 +72,7 @@ sealed class HTIngredient(val count: Int) {
 
         override val matchingStacks: Collection<ItemStack> = listOf()
 
-        override fun matches(stack: ItemStack): Boolean = stack.isEmpty
+        override fun test(stack: ItemStack): Boolean = stack.isEmpty
 
         override fun jsonConsumer(consumer: Consumer<JsonObject>) {
 
@@ -85,7 +87,7 @@ sealed class HTIngredient(val count: Int) {
 
         override val matchingStacks: Collection<ItemStack> = listOf(ItemStack(item, count))
 
-        override fun matches(stack: ItemStack): Boolean = stack.isOf(item) && stack.count >= count
+        override fun test(stack: ItemStack): Boolean = stack.isOf(item) && stack.count >= count
 
         override fun jsonConsumer(consumer: Consumer<JsonObject>) {
             consumer.accept(JsonObject().apply {
@@ -105,11 +107,10 @@ sealed class HTIngredient(val count: Int) {
         count: Int
     ) : HTIngredient(count) {
 
-        override val matchingStacks: Collection<ItemStack> = Registry.ITEM.getOrCreateEntryList(tagKey)
-            .map(RegistryEntry<net.minecraft.item.Item>::value)
-            .map { ItemStack(it, count) }
+        override val matchingStacks: Collection<ItemStack> =
+            tagKey.getEntries(Registry.ITEM).map { ItemStack(it, count) }
 
-        override fun matches(stack: ItemStack): Boolean = stack.isIn(tagKey) && stack.count >= count
+        override fun test(stack: ItemStack): Boolean = stack.isIn(tagKey) && stack.count >= count
 
         override fun jsonConsumer(consumer: Consumer<JsonObject>) {
             consumer.accept(JsonObject().apply {
@@ -127,7 +128,8 @@ sealed class HTIngredient(val count: Int) {
     class Packet(override val matchingStacks: Collection<ItemStack>) : HTIngredient(
         matchingStacks.toList().getOrNull(0)?.count ?: 1
     ) {
-        override fun matches(stack: ItemStack): Boolean = matchingStacks.any { ItemStack.areEqual(stack, it) }
+
+        override fun test(stack: ItemStack): Boolean = matchingStacks.any { ItemStack.areEqual(stack, it) }
 
         override fun jsonConsumer(consumer: Consumer<JsonObject>) {
 
