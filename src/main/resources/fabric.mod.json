@@ -32,6 +32,12 @@
         "adapter": "kotlin",
         "value": "io.github.hiiragi283.laboratory.datagen.HTLaboratoryDataGen"
       }
+    ],
+    "rei_client": [
+      {
+        "adapter": "kotlin",
+        "value": "io.github.hiiragi283.laboratory.compat.rei.HLReiPlugin"
+      }
     ]
   },
   "mixins": [

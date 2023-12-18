@@ -16,12 +16,12 @@ import java.util.function.Predicate
 
 sealed class HTIngredient(val count: Int) : Predicate<ItemStack> {
 
-    abstract val matchingStacks: Collection<ItemStack>
+    abstract fun getMatchingStacks(): Collection<ItemStack>
 
     abstract fun jsonConsumer(consumer: Consumer<JsonObject>)
 
     fun write(buf: PacketByteBuf) {
-        buf.writeCollection(matchingStacks, PacketByteBuf::writeItemStack)
+        buf.writeCollection(getMatchingStacks(), PacketByteBuf::writeItemStack)
     }
 
     companion object {
@@ -63,16 +63,16 @@ sealed class HTIngredient(val count: Int) : Predicate<ItemStack> {
         @JvmStatic
         fun read(buf: PacketByteBuf): HTIngredient {
             val list: List<ItemStack> = buf.readList(PacketByteBuf::readItemStack)
-            return if (list.isEmpty() ) empty() else Packet(list)
+            return if (list.isEmpty()) empty() else Packet(list)
         }
 
     }
 
     data object Empty : HTIngredient(0) {
 
-        override val matchingStacks: Collection<ItemStack> = listOf()
-
         override fun test(stack: ItemStack): Boolean = stack.isEmpty
+
+        override fun getMatchingStacks(): Collection<ItemStack> = listOf()
 
         override fun jsonConsumer(consumer: Consumer<JsonObject>) {
 
@@ -85,9 +85,9 @@ sealed class HTIngredient(val count: Int) : Predicate<ItemStack> {
         count: Int
     ) : HTIngredient(count) {
 
-        override val matchingStacks: Collection<ItemStack> = listOf(ItemStack(item, count))
-
         override fun test(stack: ItemStack): Boolean = stack.isOf(item) && stack.count >= count
+
+        override fun getMatchingStacks(): Collection<ItemStack> = listOf(ItemStack(item, count))
 
         override fun jsonConsumer(consumer: Consumer<JsonObject>) {
             consumer.accept(JsonObject().apply {
@@ -107,10 +107,10 @@ sealed class HTIngredient(val count: Int) : Predicate<ItemStack> {
         count: Int
     ) : HTIngredient(count) {
 
-        override val matchingStacks: Collection<ItemStack> =
-            tagKey.getEntries(Registry.ITEM).map { ItemStack(it, count) }
-
         override fun test(stack: ItemStack): Boolean = stack.isIn(tagKey) && stack.count >= count
+
+        override fun getMatchingStacks(): Collection<ItemStack> =
+            tagKey.getEntries(Registry.ITEM).map { ItemStack(it, count) }
 
         override fun jsonConsumer(consumer: Consumer<JsonObject>) {
             consumer.accept(JsonObject().apply {
@@ -125,11 +125,13 @@ sealed class HTIngredient(val count: Int) : Predicate<ItemStack> {
 
     }
 
-    class Packet(override val matchingStacks: Collection<ItemStack>) : HTIngredient(
-        matchingStacks.toList().getOrNull(0)?.count ?: 1
+    class Packet(private val list: Collection<ItemStack>) : HTIngredient(
+        list.toList().getOrNull(0)?.count ?: 1
     ) {
 
-        override fun test(stack: ItemStack): Boolean = matchingStacks.any { ItemStack.areEqual(stack, it) }
+        override fun test(stack: ItemStack): Boolean = getMatchingStacks().any { ItemStack.areEqual(stack, it) }
+
+        override fun getMatchingStacks(): Collection<ItemStack> = list
 
         override fun jsonConsumer(consumer: Consumer<JsonObject>) {
 

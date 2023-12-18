@@ -9,7 +9,8 @@ import net.minecraft.data.client.ItemModelGenerator
 class HLModelProvider(fabricDataGenerator: FabricDataGenerator) : FabricModelProvider(fabricDataGenerator) {
 
     override fun generateBlockStateModels(blockStateModelGenerator: BlockStateModelGenerator) {
-        blockStateModelGenerator.registerSimpleCubeAll(HLBlocks.MORTAR)
+        blockStateModelGenerator.registerSimpleState(HLBlocks.MORTAR)
+        blockStateModelGenerator.registerSimpleState(HLBlocks.PORCELAIN)
     }
 
     override fun generateItemModels(itemModelGenerator: ItemModelGenerator) {

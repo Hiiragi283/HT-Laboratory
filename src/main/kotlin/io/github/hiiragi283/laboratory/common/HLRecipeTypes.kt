@@ -7,17 +7,17 @@ import net.minecraft.util.registry.Registry
 
 object HLRecipeTypes {
 
-    //    Process    //
-
-    @JvmField
-    val MORTAR: RecipeType<HTMortarRecipe> = recipeType("mortar")
+    private class Impl<T : Recipe<*>>(val name: String) : RecipeType<T> {
+        override fun toString(): String = name
+    }
 
     private fun <T : Recipe<*>> recipeType(name: String): RecipeType<T> = Registry.register(
         Registry.RECIPE_TYPE,
         HTLaboratoryCommon.id(name),
-        object : RecipeType<T> {
-            override fun toString(): String = name
-        }
+        Impl(name)
     )
+
+    @JvmField
+    val MORTAR: RecipeType<HTMortarRecipe> = recipeType("mortar")
 
 }

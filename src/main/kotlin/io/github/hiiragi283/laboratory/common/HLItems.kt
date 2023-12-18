@@ -10,11 +10,11 @@ object HLItems {
     @JvmField
     val REGISTRY: Map<String, Item> = map
 
-    //    Process    //
-
     internal fun register(path: String, item: Item): Item {
         map.putIfAbsent(path, item)
         return Registry.register(Registry.ITEM, HTLaboratoryCommon.id(path), item)
     }
+
+    //    Process    //
 
 }

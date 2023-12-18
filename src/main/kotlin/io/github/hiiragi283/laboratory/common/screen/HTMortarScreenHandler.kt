@@ -1,5 +1,6 @@
 package io.github.hiiragi283.laboratory.common.screen
 
+import io.github.hiiragi283.laboratory.api.recipe.HTIngredient
 import io.github.hiiragi283.laboratory.api.recipe.HTMortarRecipe
 import io.github.hiiragi283.laboratory.common.HLBlocks
 import io.github.hiiragi283.laboratory.common.HLRecipeTypes
@@ -36,14 +37,14 @@ class HTMortarScreenHandler(
     override fun onTakeOutput(player: PlayerEntity, stack: ItemStack) {
         stack.onCraft(player.world, player, stack.count)
         output.unlockLastRecipe(player)
-        decrementStack(0)
-        decrementStack(1)
+        decrementStack(0, currentRecipe!!.primary)
+        decrementStack(1, currentRecipe!!.secondary)
         context.run { world, pos -> world.syncWorldEvent(WorldEvents.SMITHING_TABLE_USED, pos, 0) }
     }
 
-    private fun decrementStack(slot: Int) {
+    private fun decrementStack(slot: Int, ingredient: HTIngredient) {
         input.getStack(slot).run {
-            this.decrement(1)
+            this.decrement(ingredient.count)
             input.setStack(slot, this)
         }
     }

@@ -8,6 +8,7 @@ object HTLaboratoryDataGen : DataGeneratorEntrypoint {
 	override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
 		fabricDataGenerator.addProvider(::HLModelProvider)
 		fabricDataGenerator.addProvider(::HLRecipeProvider)
+		fabricDataGenerator.addProvider(::HLBlockLootTableProvider)
 	}
 
 }

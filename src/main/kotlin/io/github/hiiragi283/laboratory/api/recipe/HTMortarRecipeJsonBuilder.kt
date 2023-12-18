@@ -47,7 +47,6 @@ class HTMortarRecipeJsonBuilder private constructor(
     override fun getOutputItem(): Item = output
 
     override fun offerTo(exporter: Consumer<RecipeJsonProvider>, recipeId: Identifier) {
-        validate(recipeId)
         advancementBuilder
             .parent(Identifier("recipes/root"))
             .criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))

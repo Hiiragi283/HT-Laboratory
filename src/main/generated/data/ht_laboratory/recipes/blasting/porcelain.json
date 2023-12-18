@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "minecraft:clay"
+  },
+  "result": "ht_laboratory:porcelain",
+  "experience": 0.0,
+  "cookingtime": 100
+}
