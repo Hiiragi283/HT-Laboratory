@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "ht_laboratory:mortar/bronze_dust"
+      "ht_laboratory:mortar/mix/bronze_dust"
     ]
   },
   "criteria": {
@@ -29,7 +29,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "ht_laboratory:mortar/bronze_dust"
+        "recipe": "ht_laboratory:mortar/mix/bronze_dust"
       }
     }
   },

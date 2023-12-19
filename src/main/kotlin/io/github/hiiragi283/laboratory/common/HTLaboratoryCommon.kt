@@ -9,7 +9,7 @@ object HTLaboratoryCommon : ModInitializer {
     const val MOD_ID: String = "ht_laboratory"
     const val MOD_NAME: String = "HT Laboratory"
 
-    private val logger = LoggerFactory.getLogger(MOD_NAME)
+    internal val LOGGER = LoggerFactory.getLogger(MOD_NAME)
 
     override fun onInitialize() {
         HLBlockEntityTypes

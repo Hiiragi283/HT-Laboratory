@@ -28,7 +28,7 @@ object HTMortarBlock : CraftingTableBlock(
 
     val TITLE: Text = TranslatableText("container.ht_laboratory.mortar")
 
-    private val SHAPE = createCuboidShape(5.0, 0.0, 5.0, 11.0, 2.0, 11.0)
+    private val SHAPE = createCuboidShape(3.0, 0.0, 3.0, 13.0, 4.0, 13.0)
 
     //    AbstractBlock    //
 

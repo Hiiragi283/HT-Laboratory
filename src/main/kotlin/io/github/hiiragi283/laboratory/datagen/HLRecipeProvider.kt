@@ -55,7 +55,7 @@ class HLRecipeProvider(fabricDataGenerator: FabricDataGenerator) : FabricRecipeP
             .setSecondaryInput(HTIngredient.ofTag(HTShapes.DUST.getCommonTag(HTElementMaterials.TIN), 1))
             .criterion("has_copper_dust", conditionsFromTag(HTShapes.DUST.getCommonTag(HTElementMaterials.COPPER)))
             .criterion("has_tin_dust", conditionsFromTag(HTShapes.DUST.getCommonTag(HTElementMaterials.TIN)))
-            .offerTo(exporter, HTLaboratoryCommon.id("mortar/bronze_dust"))
+            .offerTo(exporter, HTLaboratoryCommon.id("mortar/mix/bronze_dust"))
     }
 
 }

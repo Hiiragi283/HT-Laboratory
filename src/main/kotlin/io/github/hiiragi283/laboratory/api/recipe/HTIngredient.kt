@@ -4,6 +4,8 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
 import com.google.gson.JsonSyntaxException
+import io.github.hiiragi283.laboratory.common.HLItems
+import io.github.hiiragi283.laboratory.common.item.HTBeakerItem
 import io.github.hiiragi283.material.common.util.getEntries
 import net.minecraft.item.ItemConvertible
 import net.minecraft.item.ItemStack
@@ -31,11 +33,15 @@ sealed class HTIngredient(val count: Int) : Predicate<ItemStack> {
 
         @JvmOverloads
         @JvmStatic
-        fun ofItem(item: ItemConvertible, count: Int = 1) = Item(item.asItem(), count)
+        fun ofItem(item: ItemConvertible, count: Int = 1): HTIngredient = Item(item.asItem(), count)
 
         @JvmOverloads
         @JvmStatic
-        fun ofTag(tagKey: TagKey<net.minecraft.item.Item>, count: Int = 1) = Tag(tagKey, count)
+        fun ofTag(tagKey: TagKey<net.minecraft.item.Item>, count: Int = 1): HTIngredient = Tag(tagKey, count)
+
+        @JvmOverloads
+        @JvmStatic
+        fun ofFluid(fluid: net.minecraft.fluid.Fluid, count: Int = 1): HTIngredient = Fluid(fluid, count)
 
         @JvmStatic
         fun read(json: JsonElement): HTIngredient {
@@ -43,20 +49,35 @@ sealed class HTIngredient(val count: Int) : Predicate<ItemStack> {
                 val jsonObject: JsonObject = json.asJsonObject
                 val hasItem: Boolean = jsonObject.has("item")
                 val hasTag: Boolean = jsonObject.has("tag")
+                val hasFluid: Boolean = jsonObject.has("fluid")
                 val hasCount: Boolean = jsonObject.has("count")
-                if (hasItem && hasTag) {
-                    throw JsonParseException("An ingredient entry is either a tag or an item, not both!")
-                } else if (hasItem) {
-                    val itemId = Identifier(jsonObject.getAsJsonPrimitive("item").asString)
-                    val item: net.minecraft.item.Item = Registry.ITEM.get(itemId)
-                    val count: Int = if (hasCount) jsonObject.get("count").asInt else 1
-                    return Item(item, count)
-                } else if (hasTag) {
-                    val tagId = Identifier(jsonObject.getAsJsonPrimitive("tag").asString)
-                    val tagKey: TagKey<net.minecraft.item.Item> = TagKey.of(Registry.ITEM_KEY, tagId)
-                    val count: Int = if (hasCount) jsonObject.get("count").asInt else 1
-                    return Tag(tagKey, count)
-                } else throw JsonParseException("An ingredient entry needs either a tag or an item")
+                when {
+                    hasItem && hasTag && hasFluid || hasItem && hasTag || hasItem && hasFluid || hasTag && hasFluid ->
+                        throw JsonParseException("")
+
+                    hasItem -> {
+                        val itemId = Identifier(jsonObject.getAsJsonPrimitive("item").asString)
+                        val item: net.minecraft.item.Item = Registry.ITEM.get(itemId)
+                        val count: Int = if (hasCount) jsonObject.get("count").asInt else 1
+                        return Item(item, count)
+                    }
+
+                    hasTag -> {
+                        val tagId = Identifier(jsonObject.getAsJsonPrimitive("tag").asString)
+                        val tagKey: TagKey<net.minecraft.item.Item> = TagKey.of(Registry.ITEM_KEY, tagId)
+                        val count: Int = if (hasCount) jsonObject.get("count").asInt else 1
+                        return Tag(tagKey, count)
+                    }
+
+                    hasFluid -> {
+                        val fluidId = Identifier(jsonObject.getAsJsonPrimitive("fluid").asString)
+                        val fluid: net.minecraft.fluid.Fluid = Registry.FLUID.get(fluidId)
+                        val count: Int = if (hasCount) jsonObject.get("count").asInt else 1
+                        return Fluid(fluid, count)
+                    }
+
+                    else -> throw JsonParseException("An ingredient entry needs any of a tag, a fluid or an item!")
+                }
             } else throw JsonSyntaxException("HTIngredient must be JsonObject!")
         }
 
@@ -70,22 +91,20 @@ sealed class HTIngredient(val count: Int) : Predicate<ItemStack> {
 
     data object Empty : HTIngredient(0) {
 
-        override fun test(stack: ItemStack): Boolean = stack.isEmpty
-
         override fun getMatchingStacks(): Collection<ItemStack> = listOf()
 
         override fun jsonConsumer(consumer: Consumer<JsonObject>) {
 
         }
 
+        override fun test(stack: ItemStack): Boolean = stack.isEmpty
+
     }
 
-    class Item internal constructor(
-        val item: net.minecraft.item.Item,
+    private class Item(
+        private val item: net.minecraft.item.Item,
         count: Int
     ) : HTIngredient(count) {
-
-        override fun test(stack: ItemStack): Boolean = stack.isOf(item) && stack.count >= count
 
         override fun getMatchingStacks(): Collection<ItemStack> = listOf(ItemStack(item, count))
 
@@ -96,18 +115,14 @@ sealed class HTIngredient(val count: Int) : Predicate<ItemStack> {
             })
         }
 
-        operator fun component1(): net.minecraft.item.Item = item
-
-        operator fun component2(): Int = count
+        override fun test(stack: ItemStack): Boolean = stack.isOf(item) && stack.count >= count
 
     }
 
-    class Tag internal constructor(
-        val tagKey: TagKey<net.minecraft.item.Item>,
+    private class Tag(
+        private val tagKey: TagKey<net.minecraft.item.Item>,
         count: Int
     ) : HTIngredient(count) {
-
-        override fun test(stack: ItemStack): Boolean = stack.isIn(tagKey) && stack.count >= count
 
         override fun getMatchingStacks(): Collection<ItemStack> =
             tagKey.getEntries(Registry.ITEM).map { ItemStack(it, count) }
@@ -119,17 +134,33 @@ sealed class HTIngredient(val count: Int) : Predicate<ItemStack> {
             })
         }
 
-        operator fun component1(): TagKey<net.minecraft.item.Item> = tagKey
-
-        operator fun component2(): Int = count
+        override fun test(stack: ItemStack): Boolean = stack.isIn(tagKey) && stack.count >= count
 
     }
 
-    class Packet(private val list: Collection<ItemStack>) : HTIngredient(
+    private class Fluid(private val fluid: net.minecraft.fluid.Fluid, count: Int) : HTIngredient(count) {
+
+        override fun getMatchingStacks(): Collection<ItemStack> = listOf(HTBeakerItem.getStack(fluid, count))
+
+        override fun jsonConsumer(consumer: Consumer<JsonObject>) {
+            consumer.accept(JsonObject().apply {
+                addProperty("fluid", Registry.FLUID.getId(fluid).toString())
+                addProperty("count", count)
+            })
+        }
+
+        override fun test(stack: ItemStack): Boolean = if (stack.isOf(HLItems.BEAKER))
+            HTBeakerItem.getFluid(stack) == this.fluid && stack.count >= count
+        else false
+
+    }
+
+    private class Packet(private val list: Collection<ItemStack>) : HTIngredient(
         list.toList().getOrNull(0)?.count ?: 1
     ) {
 
-        override fun test(stack: ItemStack): Boolean = getMatchingStacks().any { ItemStack.areEqual(stack, it) }
+        override fun test(stack: ItemStack): Boolean =
+            getMatchingStacks().any { ItemStack.areItemsEqual(stack, it) && stack.count >= count }
 
         override fun getMatchingStacks(): Collection<ItemStack> = list
 

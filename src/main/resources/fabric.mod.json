@@ -33,6 +33,12 @@
         "value": "io.github.hiiragi283.laboratory.datagen.HTLaboratoryDataGen"
       }
     ],
+    "ht_materials": [
+      {
+        "adapter": "kotlin",
+        "value": "io.github.hiiragi283.laboratory.compat.HLHTAddon"
+      }
+    ],
     "rei_client": [
       {
         "adapter": "kotlin",
