@@ -20,10 +20,10 @@ import java.util.function.Consumer
 
 class HTMortarRecipeJsonBuilder private constructor(
     private val output: Item,
-    private val count: Int
-) : CraftingRecipeJsonBuilder {
+    override val count: Int
+) : HTCraftingRecipeJsonBuilder {
 
-    constructor(output: ItemConvertible, count: Int = 0) : this(output.asItem(), count)
+    constructor(output: ItemConvertible, count: Int = 1) : this(output.asItem(), count)
 
     private lateinit var primary: HTIngredient
 
@@ -35,7 +35,7 @@ class HTMortarRecipeJsonBuilder private constructor(
 
     //    CraftingRecipeJsonBuilder    //
 
-    private val advancementBuilder: Advancement.Builder = Advancement.Builder.create()
+    override val advancementBuilder: Advancement.Builder = Advancement.Builder.create()
 
     override fun criterion(name: String, conditions: CriterionConditions): CraftingRecipeJsonBuilder =
         also { this.advancementBuilder.criterion(name, conditions) }
@@ -47,6 +47,7 @@ class HTMortarRecipeJsonBuilder private constructor(
     override fun getOutputItem(): Item = output
 
     override fun offerTo(exporter: Consumer<RecipeJsonProvider>, recipeId: Identifier) {
+        validate(recipeId)
         advancementBuilder
             .parent(Identifier("recipes/root"))
             .criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
@@ -63,10 +64,6 @@ class HTMortarRecipeJsonBuilder private constructor(
                 recipeId.prefix("recipes/")
             )
         )
-    }
-
-    private fun validate(recipeId: Identifier) {
-        check(advancementBuilder.criteria.isNotEmpty()) { "No way of obtaining recipe $recipeId" }
     }
 
     //    RecipeJsonProvider    //

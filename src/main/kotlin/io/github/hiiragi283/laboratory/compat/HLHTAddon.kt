@@ -19,7 +19,7 @@ object HLHTAddon : HTMaterialsAddon {
 
     override fun commonSetup() {
         HTMaterial.REGISTRY.forEach { material ->
-            //mortar(material)
+            mortar(material)
         }
     }
 
