@@ -6,7 +6,7 @@ import com.google.gson.JsonParseException
 import com.google.gson.JsonSyntaxException
 import io.github.hiiragi283.laboratory.common.HLItems
 import io.github.hiiragi283.laboratory.common.item.HTBeakerItem
-import io.github.hiiragi283.material.common.util.getEntries
+import io.github.hiiragi283.material.util.getEntries
 import net.minecraft.item.ItemConvertible
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf

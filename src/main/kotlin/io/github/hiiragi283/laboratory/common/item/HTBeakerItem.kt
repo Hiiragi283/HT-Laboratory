@@ -6,9 +6,11 @@ import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantItemStorage
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext
+import net.minecraft.fluid.FlowableFluid
 import net.minecraft.fluid.Fluid
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.Item
@@ -16,6 +18,7 @@ import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.registry.Registry
@@ -25,7 +28,7 @@ import net.minecraft.util.registry.Registry
  */
 
 @Suppress("UnstableApiUsage")
-object HTBeakerItem : Item(FabricItemSettings()) {
+object HTBeakerItem : Item(FabricItemSettings().group(ItemGroup.MISC)) {
 
     @JvmStatic
     fun getStack(fluid: Fluid, count: Int = 1): ItemStack = defaultStack.apply {
@@ -51,13 +54,19 @@ object HTBeakerItem : Item(FabricItemSettings()) {
     override fun appendStacks(group: ItemGroup, stacks: DefaultedList<ItemStack>) {
         if (isIn(group)) {
             stacks.add(getEmptyStack())
-            Registry.FLUID.map(::getStack).forEach(stacks::add)
+            Registry.FLUID
+                .filterIsInstance<FlowableFluid>()
+                .filter { it.isStill(it.defaultState) }
+                .map(::getStack)
+                .forEach(stacks::add)
         }
     }
 
     override fun getName(stack: ItemStack): Text {
-
-        return super.getName(stack)
+        val fluid: Fluid = getFluid(stack)
+        val variant: FluidVariant = FluidVariant.of(fluid)
+        val attribute: Text = FluidVariantAttributes.getName(variant)
+        return TranslatableText(translationKey, attribute)
     }
 
     init {

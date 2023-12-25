@@ -1,5 +1,6 @@
 {
   "block.ht_laboratory.mortar": "Mortar",
   "block.ht_laboratory.porcelain": "Porcelain",
-  "container.ht_laboratory.mortar": "Mortar"
+  "container.ht_laboratory.mortar": "Mortar",
+  "item.ht_laboratory.beaker": "%s Beaker"
 }

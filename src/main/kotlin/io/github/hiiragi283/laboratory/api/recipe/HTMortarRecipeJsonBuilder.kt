@@ -3,7 +3,7 @@ package io.github.hiiragi283.laboratory.api.recipe
 import com.google.gson.JsonObject
 import io.github.hiiragi283.laboratory.common.HLRecipeSerializers
 import io.github.hiiragi283.laboratory.common.toJson
-import io.github.hiiragi283.material.common.util.prefix
+import io.github.hiiragi283.material.util.prefix
 import net.minecraft.advancement.Advancement
 import net.minecraft.advancement.AdvancementRewards
 import net.minecraft.advancement.CriterionMerger
