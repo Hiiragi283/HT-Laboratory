@@ -22,17 +22,19 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
+@Suppress("OVERRIDE_DEPRECATION")
 object HTMortarBlock : CraftingTableBlock(
     FabricBlockSettings.copy(Blocks.TERRACOTTA).breakInstantly().nonOpaque()
 ) {
 
-    val TITLE: Text = TranslatableText("container.ht_laboratory.mortar")
+    const val ID = "mortar"
+
+    val TITLE: Text = TranslatableText("container.ht_laboratory.$ID")
 
     private val SHAPE = createCuboidShape(3.0, 0.0, 3.0, 13.0, 4.0, 13.0)
 
     //    AbstractBlock    //
 
-    @Deprecated("Deprecated in Java", ReplaceWith("false"))
     override fun canPathfindThrough(
         state: BlockState,
         world: BlockView,
@@ -40,7 +42,6 @@ object HTMortarBlock : CraftingTableBlock(
         type: NavigationType
     ): Boolean = false
 
-    @Deprecated("Deprecated in Java")
     override fun onUse(
         state: BlockState,
         world: World,
@@ -55,7 +56,6 @@ object HTMortarBlock : CraftingTableBlock(
         return ActionResult.SUCCESS
     }
 
-    @Deprecated("Deprecated in Java")
     override fun createScreenHandlerFactory(
         state: BlockState,
         world: World,
@@ -64,7 +64,6 @@ object HTMortarBlock : CraftingTableBlock(
         HTMortarScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos))
     }, TITLE)
 
-    @Deprecated("Deprecated in Java")
     override fun getOutlineShape(
         state: BlockState,
         world: BlockView,

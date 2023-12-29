@@ -1,6 +1,7 @@
 package io.github.hiiragi283.laboratory.common
 
 import io.github.hiiragi283.laboratory.api.recipe.HTMortarRecipe
+import io.github.hiiragi283.laboratory.common.block.HTMortarBlock
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeType
 import net.minecraft.util.registry.Registry
@@ -18,6 +19,6 @@ object HLRecipeTypes {
     )
 
     @JvmField
-    val MORTAR: RecipeType<HTMortarRecipe> = recipeType("mortar")
+    val MORTAR: RecipeType<HTMortarRecipe> = recipeType(HTMortarBlock.ID)
 
 }

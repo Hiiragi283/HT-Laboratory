@@ -1,5 +1,6 @@
 package io.github.hiiragi283.laboratory.client
 
+import io.github.hiiragi283.laboratory.client.gui.HTAshCollectorScreen
 import io.github.hiiragi283.laboratory.client.gui.HTMortarScreen
 import io.github.hiiragi283.laboratory.common.HLBlocks
 import io.github.hiiragi283.laboratory.common.HLScreenHandlerTypes
@@ -16,6 +17,7 @@ object HTLaboratoryClient : ClientModInitializer {
     override fun onInitializeClient() {
 
         HandledScreens.register(HLScreenHandlerTypes.MORTAR, ::HTMortarScreen)
+        HandledScreens.register(HLScreenHandlerTypes.ASH_COLLECTOR, ::HTAshCollectorScreen)
 
         BlockRenderLayerMap.INSTANCE.putBlock(HLBlocks.MORTAR, RenderLayer.getCutout())
 

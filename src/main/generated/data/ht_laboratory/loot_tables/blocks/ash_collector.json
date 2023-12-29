@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "ht_laboratory:mortar"
+          "name": "ht_laboratory:ash_collector"
         }
       ],
       "conditions": [

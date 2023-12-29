@@ -1,5 +1,7 @@
 package io.github.hiiragi283.laboratory.common.block.entity
 
+import io.github.hiiragi283.laboratory.common.HLBlockEntityTypes
+import io.github.hiiragi283.laboratory.common.screen.HTAshCollectorScreenHandler
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -13,13 +15,14 @@ import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandler
+import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 
-class HTMortarBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(
-    null,
+class HTAshCollectorBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(
+    HLBlockEntityTypes.ASH_COLLECTOR,
     pos,
     state
 ), Inventory, NamedScreenHandlerFactory {
@@ -40,7 +43,7 @@ class HTMortarBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(
 
     //    Inventory    //
 
-    private val inventory: DefaultedList<ItemStack> = DefaultedList.ofSize(3, ItemStack.EMPTY)
+    private val inventory: DefaultedList<ItemStack> = DefaultedList.ofSize(1, ItemStack.EMPTY)
 
     override fun clear() {
         inventory.clear()
@@ -77,10 +80,9 @@ class HTMortarBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(
 
     //    NamedScreenHandlerFactory    //
 
-    override fun createMenu(syncId: Int, inv: PlayerInventory?, player: PlayerEntity?): ScreenHandler? {
-        TODO("Not yet implemented")
-    }
+    override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler =
+        HTAshCollectorScreenHandler(syncId, inv, ScreenHandlerContext.create(world, pos))
 
-    override fun getDisplayName(): Text = LiteralText("Mortar")
+    override fun getDisplayName(): Text = LiteralText("Ash Collector")
 
 }

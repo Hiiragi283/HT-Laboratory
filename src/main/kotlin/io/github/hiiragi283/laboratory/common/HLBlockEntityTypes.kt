@@ -1,5 +1,7 @@
 package io.github.hiiragi283.laboratory.common
 
+import io.github.hiiragi283.laboratory.common.block.HTAshCollectorBlock
+import io.github.hiiragi283.laboratory.common.block.entity.HTAshCollectorBlockEntity
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
@@ -16,14 +18,12 @@ object HLBlockEntityTypes {
 
     //    Process    //
 
-    /*@JvmField
-    val MORTAR: BlockEntityType<HTMortarBlockEntity> = Registry.register(
-        Registry.BLOCK_ENTITY_TYPE,
-        HTLaboratoryCommon.id("mortar"),
+    @JvmField
+    val ASH_COLLECTOR = register(
+        HTAshCollectorBlock.ID,
         FabricBlockEntityTypeBuilder
-            .create(::HTMortarBlockEntity)
-            .addBlock(HLBlocks.MORTAR)
-            .build()
-    )*/
+            .create(::HTAshCollectorBlockEntity)
+            .addBlock(HLBlocks.ASH_COLLECTOR)
+    )
 
 }

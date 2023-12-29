@@ -1,5 +1,6 @@
 package io.github.hiiragi283.laboratory.common
 
+import io.github.hiiragi283.laboratory.common.block.HTAshCollectorBlock
 import io.github.hiiragi283.laboratory.common.block.HTMortarBlock
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
@@ -29,7 +30,15 @@ object HLBlocks {
     //    Process    //
 
     @JvmField
-    val MORTAR: Block = register("mortar", HTMortarBlock) {
+    val ASH_COLLECTOR = register(HTAshCollectorBlock.ID, HTAshCollectorBlock) {
+        BlockItem(
+            it,
+            FabricItemSettings().group(ItemGroup.DECORATIONS)
+        )
+    }
+
+    @JvmField
+    val MORTAR: Block = register(HTMortarBlock.ID, HTMortarBlock) {
         BlockItem(
             it,
             FabricItemSettings().group(ItemGroup.DECORATIONS)
