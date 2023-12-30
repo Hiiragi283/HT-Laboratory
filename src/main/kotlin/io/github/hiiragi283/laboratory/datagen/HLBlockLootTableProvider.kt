@@ -8,7 +8,7 @@ class HLBlockLootTableProvider(fabricDataGenerator: FabricDataGenerator) :
     FabricBlockLootTableProvider(fabricDataGenerator) {
 
     override fun generateBlockLootTables() {
-        addDrop(HLBlocks.ASH_COLLECTOR)
+        addDrop(HLBlocks.ASH_COLLECTOR, ::nameableContainerDrops)
         addDrop(HLBlocks.MORTAR)
         addDrop(HLBlocks.PORCELAIN)
     }

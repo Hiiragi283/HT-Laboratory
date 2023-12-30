@@ -1,31 +1,28 @@
 package io.github.hiiragi283.laboratory.common.block.entity
 
 import io.github.hiiragi283.laboratory.common.HLBlockEntityTypes
+import io.github.hiiragi283.laboratory.common.block.HTAbstractCollectorBlock
 import io.github.hiiragi283.laboratory.common.screen.HTAshCollectorScreenHandler
 import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.LockableContainerBlockEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
-import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.Packet
 import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
-import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerContext
-import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 
-class HTAshCollectorBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(
+class HTAshCollectorBlockEntity(pos: BlockPos, state: BlockState) : LockableContainerBlockEntity(
     HLBlockEntityTypes.ASH_COLLECTOR,
     pos,
     state
-), Inventory, NamedScreenHandlerFactory {
+) {
 
     override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
@@ -51,7 +48,7 @@ class HTAshCollectorBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(
 
     override fun size(): Int = inventory.size
 
-    override fun isEmpty(): Boolean = inventory.all(ItemStack::isEmpty)
+    override fun isEmpty(): Boolean = inventory.isEmpty()
 
     override fun getStack(slot: Int): ItemStack = inventory[slot]
 
@@ -67,22 +64,18 @@ class HTAshCollectorBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(
 
     override fun setStack(slot: Int, stack: ItemStack) {
         inventory[slot] = stack
-        if (stack.count > stack.maxCount) {
-            stack.count = stack.maxCount
+        if (!stack.isEmpty && stack.count > maxCountPerStack) {
+            stack.count = maxCountPerStack
         }
-    }
-
-    override fun markDirty() {
-
     }
 
     override fun canPlayerUse(player: PlayerEntity): Boolean = true
 
-    //    NamedScreenHandlerFactory    //
+    //    LockableContainerBlockEntity    //
 
-    override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler =
-        HTAshCollectorScreenHandler(syncId, inv, ScreenHandlerContext.create(world, pos))
+    override fun getContainerName(): Text = HTAbstractCollectorBlock.getTitle()
 
-    override fun getDisplayName(): Text = LiteralText("Ash Collector")
+    override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): ScreenHandler =
+        HTAshCollectorScreenHandler(syncId, playerInventory, this)
 
 }

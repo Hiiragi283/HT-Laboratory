@@ -29,7 +29,8 @@ object HTMortarBlock : CraftingTableBlock(
 
     const val ID = "mortar"
 
-    val TITLE: Text = TranslatableText("container.ht_laboratory.$ID")
+    @JvmStatic
+    fun getTitle(): Text = TranslatableText(translationKey)
 
     private val SHAPE = createCuboidShape(3.0, 0.0, 3.0, 13.0, 4.0, 13.0)
 
@@ -62,7 +63,7 @@ object HTMortarBlock : CraftingTableBlock(
         pos: BlockPos
     ): NamedScreenHandlerFactory = SimpleNamedScreenHandlerFactory({ syncId: Int, inventory: PlayerInventory, _ ->
         HTMortarScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos))
-    }, TITLE)
+    }, getTitle())
 
     override fun getOutlineShape(
         state: BlockState,

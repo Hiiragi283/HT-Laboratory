@@ -17,7 +17,7 @@ object HTMortarCategory : DisplayCategory<HTMortarDisplay> {
 
     override fun getCategoryIdentifier(): CategoryIdentifier<HTMortarDisplay> = HLReiPlugin.MORTAR
 
-    override fun getTitle(): Text = HTMortarBlock.TITLE
+    override fun getTitle(): Text = HTMortarBlock.getTitle()
 
     override fun getIcon(): Renderer = EntryStacks.of(HLBlocks.MORTAR)
 
