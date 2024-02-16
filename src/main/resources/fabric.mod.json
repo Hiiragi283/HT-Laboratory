@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "ht_laboratory",
+  "version": "${version}",
+  "name": "HT Laboratory",
+  "description": "A Minecraft mod for Fabric/Quilt that adds laboratory contents ",
+  "authors": [
+    "Hiiragi283"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "MPL-2.0",
+  "icon": "assets/ht_laboratory/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "io.github.hiiragi283.laboratory.common.HTLaboratoryCommon"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "io.github.hiiragi283.laboratory.client.HTLaboratoryClient"
+      }
+    ],
+    "fabric-datagen": [
+      {
+        "adapter": "kotlin",
+        "value": "io.github.hiiragi283.laboratory.datagen.HTLaboratoryDataGen"
+      }
+    ],
+    "ht_materials": [
+      {
+        "adapter": "kotlin",
+        "value": "io.github.hiiragi283.laboratory.compat.HLHTAddon"
+      }
+    ],
+    "rei_client": [
+      {
+        "adapter": "kotlin",
+        "value": "io.github.hiiragi283.laboratory.compat.rei.HLReiPlugin"
+      }
+    ]
+  },
+  "mixins": [
+    "ht_laboratory.mixins.json"
+  ],
+  "depends": {
+    "fabric-api": "*",
+    "fabric-language-kotlin": ">=1.9.21",
+    "fabricloader": ">=0.15.1",
+    "java": ">=17",
+    "minecraft": "~1.18.2",
+    "ht_materials": ">=1.0.0"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

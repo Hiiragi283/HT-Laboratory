@@ -1,0 +1,15 @@
+{
+  "type": "ht_laboratory:mortar",
+  "primary": {
+    "tag": "c:copper_dusts",
+    "count": 3
+  },
+  "secondary": {
+    "tag": "c:tin_dusts",
+    "count": 1
+  },
+  "result": {
+    "item": "ht_materials:bronze_dust",
+    "count": 4
+  }
+}

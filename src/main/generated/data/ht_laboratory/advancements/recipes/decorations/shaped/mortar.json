@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "ht_laboratory:shaped/mortar"
+    ]
+  },
+  "criteria": {
+    "has_porcelain": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "ht_laboratory:porcelain"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "ht_laboratory:shaped/mortar"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_porcelain",
+      "has_the_recipe"
+    ]
+  ]
+}
